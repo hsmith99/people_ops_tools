@@ -1130,3 +1130,132 @@ function setup() {
   
   Logger.log('Setup complete! All sheets initialized.');
 }
+
+// ==================== FORM MAINTENANCE FUNCTIONS ====================
+
+/**
+ * Update form with current employee list in "Name (email)" format
+ * 
+ * This function automatically populates checkbox options in Google Forms
+ * with all active employees in the format "Name (email@company.com)"
+ * 
+ * @param {string} formId - The Google Form ID
+ * @param {string} questionTitle - The exact title of the checkbox question to update
+ * 
+ * Usage:
+ *   updateFormEmployeeList(CONFIG.PEER_SELECTION_FORM_ID, 'Select Peer Reviewers');
+ *   updateFormEmployeeList(CONFIG.MANAGER_CONFIRMATION_FORM_ID, 'Confirm or Reselect Peer Reviewers');
+ */
+function updateFormEmployeeList(formId, questionTitle) {
+  try {
+    const form = FormApp.openById(formId);
+    const employees = getEmployeeData().filter(emp => emp.status === 'Active');
+    
+    if (employees.length === 0) {
+      Logger.log('No active employees found. Make sure Employees sheet has data.');
+      return;
+    }
+    
+    // Find the question by title
+    const items = form.getItems();
+    let question = null;
+    let questionIndex = -1;
+    
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].getTitle() === questionTitle) {
+        question = items[i];
+        questionIndex = i;
+        break;
+      }
+    }
+    
+    if (!question) {
+      Logger.log(`Question "${questionTitle}" not found in form. Available questions:`);
+      items.forEach((item, idx) => {
+        Logger.log(`  ${idx + 1}. "${item.getTitle()}" (Type: ${item.getType()})`);
+      });
+      return;
+    }
+    
+    // Check if it's a checkbox question
+    if (question.getType() !== FormApp.ItemType.CHECKBOX) {
+      Logger.log(`Question "${questionTitle}" is not a checkbox. Type: ${question.getType()}`);
+      return;
+    }
+    
+    const checkboxItem = question.asCheckboxItem();
+    
+    // Create choices in "Name (email)" format
+    const choices = employees.map(emp => {
+      const choiceText = `${emp.name} (${emp.email})`;
+      return checkboxItem.createChoice(choiceText);
+    });
+    
+    // Update the question with new choices
+    checkboxItem.setChoices(choices);
+    
+    Logger.log(`✅ Successfully updated form "${form.getTitle()}"`);
+    Logger.log(`   Question: "${questionTitle}"`);
+    Logger.log(`   Added ${choices.length} employees in "Name (email)" format`);
+    Logger.log(`   Example: "${choices[0].getValue()}"`);
+    
+    return {
+      success: true,
+      formTitle: form.getTitle(),
+      questionTitle: questionTitle,
+      employeeCount: choices.length,
+      example: choices[0].getValue()
+    };
+    
+  } catch (error) {
+    Logger.log(`❌ Error updating form: ${error.toString()}`);
+    Logger.log(`   Form ID: ${formId}`);
+    Logger.log(`   Question: ${questionTitle}`);
+    return {
+      success: false,
+      error: error.toString()
+    };
+  }
+}
+
+/**
+ * Update both peer selection forms with current employee list
+ * Convenience function to update both forms at once
+ * 
+ * Usage: updateAllFormEmployeeLists()
+ */
+function updateAllFormEmployeeLists() {
+  Logger.log('Updating employee lists in all forms...');
+  Logger.log('---');
+  
+  // Update Peer Selection Form
+  if (CONFIG.PEER_SELECTION_FORM_ID && CONFIG.PEER_SELECTION_FORM_ID !== 'YOUR_PEER_SELECTION_FORM_ID') {
+    Logger.log('Updating Peer Selection Form...');
+    const result1 = updateFormEmployeeList(CONFIG.PEER_SELECTION_FORM_ID, 'Select Peer Reviewers');
+    if (result1 && result1.success) {
+      Logger.log(`✅ Peer Selection Form updated: ${result1.employeeCount} employees`);
+    } else {
+      Logger.log(`❌ Failed to update Peer Selection Form`);
+    }
+  } else {
+    Logger.log('⚠️  Peer Selection Form ID not configured');
+  }
+  
+  Logger.log('---');
+  
+  // Update Manager Confirmation Form
+  if (CONFIG.MANAGER_CONFIRMATION_FORM_ID && CONFIG.MANAGER_CONFIRMATION_FORM_ID !== 'YOUR_MANAGER_CONFIRMATION_FORM_ID') {
+    Logger.log('Updating Manager Confirmation Form...');
+    const result2 = updateFormEmployeeList(CONFIG.MANAGER_CONFIRMATION_FORM_ID, 'Confirm or Reselect Peer Reviewers');
+    if (result2 && result2.success) {
+      Logger.log(`✅ Manager Confirmation Form updated: ${result2.employeeCount} employees`);
+    } else {
+      Logger.log(`❌ Failed to update Manager Confirmation Form`);
+    }
+  } else {
+    Logger.log('⚠️  Manager Confirmation Form ID not configured');
+  }
+  
+  Logger.log('---');
+  Logger.log('Update complete!');
+}
