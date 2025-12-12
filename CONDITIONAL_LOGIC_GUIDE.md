@@ -22,26 +22,37 @@ Conditional logic ensures users only see relevant questions.
 
 ## Step-by-Step Setup
 
-### Step 1: Create Review Type Question
+### Step 1: Add Initial Shared Questions First
 
-1. In your Google Form, add a new question
-2. **Type**: Dropdown (recommended) or Multiple choice
-3. **Title**: "Review Type" or "What's your relationship to the individual you are evaluating?"
-4. **Options**:
+1. **Add questions that ALL review types will answer**
+   - These appear in the first section
+   - Examples:
+     - Overall performance rating (Scale 1-5)
+     - Key strengths (Paragraph)
+     - Areas for improvement (Paragraph)
+     - Specific examples (Paragraph)
+2. **These questions are answered by everyone** regardless of review type
+
+### Step 2: Create Review Type Question (After Initial Questions)
+
+1. **Position the Review Type question AFTER your initial shared questions**
+2. In your Google Form, add a new question
+3. **Type**: Dropdown (recommended) or Multiple choice
+4. **Title**: "Review Type" or "What's your relationship to the individual you are evaluating?"
+5. **Options**:
    - Self
    - Manager (or "My Manager")
    - Peer
    - Direct Report (or "My Direct Report")
-5. **Required**: Yes
-6. **Description**: "**Please do not modify this field** - It has been pre-filled for you."
+6. **Required**: Yes
+7. **Description**: "**Please do not modify this field** - It has been pre-filled for you."
 
-**Important**: The option values must match what the script sends:
-- "Self"
-- "Manager" 
-- "Peer"
-- "Direct Report"
+**Important**: 
+- The option values must match what the script sends: "Self", "Manager", "Peer", "Direct Report"
+- This question should come **after** your initial shared questions
+- Conditional logic will start from this question
 
-### Step 2: Create Sections for Each Review Type
+### Step 3: Create Sections for Each Review Type
 
 1. Click the **"Add section"** button (two rectangles icon) in the form toolbar
 2. Create 4 sections:
@@ -50,7 +61,7 @@ Conditional logic ensures users only see relevant questions.
    - **Section 4**: "Peer Review Questions"
    - **Section 5**: "Direct Report Review Questions"
 
-### Step 3: Add Questions to Each Section
+### Step 4: Add Questions to Each Conditional Section
 
 Add your review questions to the appropriate section:
 
@@ -81,7 +92,7 @@ Add your review questions to the appropriate section:
 - How can they grow in their role? (Paragraph)
 - Overall performance rating (Multiple choice)
 
-### Step 4: Set Up Conditional Logic
+### Step 5: Set Up Conditional Logic
 
 For each section, set up conditional logic:
 
@@ -95,7 +106,7 @@ For each section, set up conditional logic:
    - **"Peer Review Questions"** → Show when **"Peer"** is selected
    - **"Direct Report Review Questions"** → Show when **"Direct Report"** is selected
 
-### Step 5: Set Default Flow
+### Step 6: Set Default Flow
 
 For the main form flow:
 
@@ -108,10 +119,14 @@ For the main form flow:
 ```
 Form Structure:
 
-[Section 1: Basic Info]
+[Section 1: Initial Questions - All Review Types]
   Question 1: Reviewer Email (pre-filled)
   Question 2: Reviewee Email (pre-filled)
-  Question 3: Review Type (pre-filled dropdown)
+  Question 3: Reviewee Name
+  Question 4: Overall performance rating (shared - all answer)
+  Question 5: Key strengths (shared - all answer)
+  Question 6: Areas for improvement (shared - all answer)
+  Question 7: Review Type (pre-filled dropdown) ← Conditional logic starts here
     ↓
     Conditional Logic:
     ├─ If "Self" → [Section 2: Self Review Questions]
@@ -126,6 +141,11 @@ Form Structure:
     └─ If "Direct Report" → [Section 5: Direct Report Review Questions]
                               → Submit form
 ```
+
+**Key Points:**
+- All users answer Questions 1-6 (shared questions)
+- Review Type question (Question 7) determines which conditional section appears
+- Each conditional section has type-specific questions
 
 ## How Pre-filling Works with Conditional Logic
 

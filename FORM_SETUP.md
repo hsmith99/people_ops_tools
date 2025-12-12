@@ -143,7 +143,22 @@ The actual review form that employees complete for self-review, manager review, 
    - Required: Yes
    - **Note**: This field will be visible but pre-filled via URL parameters
 
-   **Question 3: Review Type (Pre-filled Dropdown)**
+   **Question 3: Reviewee Name (Info)**
+   - Type: Short answer text or description
+   - Title: "You are reviewing: [Name]"
+   - Description: Display the name of the person being reviewed
+   - Note: This can be populated from the reviewee email
+
+   **Questions 4-N: Initial Shared Questions (All Review Types)**
+   - Add your initial questions that **all review types** will answer
+   - Examples:
+     - "Overall performance rating" (Scale 1-5)
+     - "What are their key strengths?" (Paragraph)
+     - "What areas need improvement?" (Paragraph)
+     - "Provide specific examples" (Paragraph)
+   - These questions appear for **all** review types before conditional logic
+
+   **Question N+1: Review Type (Pre-filled Dropdown) - Positioned After Initial Questions**
    - Type: **Dropdown** or **Multiple choice** (recommended: Dropdown)
    - Title: "Review Type" or "What's your relationship to the individual you are evaluating?"
    - Description: "**Please do not modify this field** - It has been pre-filled for you."
@@ -153,46 +168,64 @@ The actual review form that employees complete for self-review, manager review, 
      - "Manager" (or "My Manager")
      - "Peer"
      - "Direct Report" (or "My Direct Report")
-   - **Important**: This must be a dropdown/multiple choice to enable conditional logic
+   - **Important**: 
+     - This must be a dropdown/multiple choice to enable conditional logic
+     - This question should come **after** your initial shared questions
+     - Conditional sections will appear **after** this question
    - **Note**: This field will be visible but pre-filled via URL parameters
-   - **Conditional Logic**: After creating this question, you can set up conditional sections that show different questions based on the selected review type (see Conditional Logic Setup below)
+   - **Conditional Logic**: After this question, set up conditional sections that show different questions based on the selected review type (see Conditional Logic Setup below)
 
-   **Question 4: Reviewee Name (Info)**
-   - Type: Short answer text or description
-   - Title: "You are reviewing: [Name]"
-   - Description: Display the name of the person being reviewed
-   - Note: This can be populated from the reviewee email
-
-   **Question 5+: Your Review Questions (Conditional)**
+   **After Review Type Question: Conditional Sections**
    
-   **Set up conditional sections** based on Review Type:
+   **Set up conditional sections** that appear after the Review Type question:
    
    - **Section: Self Review Questions** (shown when Review Type = "Self")
-     - "Rate your overall performance" (Scale 1-5)
-     - "What are your key strengths?" (Paragraph)
-     - "What areas would you like to improve?" (Paragraph)
-     - "What are your career goals?" (Paragraph)
-     - "Overall self-rating" (Multiple choice: Exceeds, Meets, Below)
+     - Additional questions specific to self-reviews
+     - Examples:
+       - "What are your career goals?" (Paragraph)
+       - "What support do you need to achieve your goals?" (Paragraph)
+       - "Overall self-rating" (Multiple choice: Exceeds, Meets, Below)
    
    - **Section: Manager Review Questions** (shown when Review Type = "Manager")
-     - "Rate your manager's leadership" (Scale 1-5)
-     - "What does your manager do well?" (Paragraph)
-     - "How can your manager better support you?" (Paragraph)
-     - "Manager effectiveness rating" (Multiple choice: Excellent, Good, Needs Improvement)
+     - Additional questions specific to manager reviews
+     - Examples:
+       - "Rate your manager's leadership" (Scale 1-5)
+       - "What does your manager do well?" (Paragraph)
+       - "How can your manager better support you?" (Paragraph)
+       - "Manager effectiveness rating" (Multiple choice: Excellent, Good, Needs Improvement)
    
    - **Section: Peer Review Questions** (shown when Review Type = "Peer")
-     - "Rate this peer's collaboration" (Scale 1-5)
-     - "What are their key strengths?" (Paragraph)
-     - "What areas need improvement?" (Paragraph)
-     - "How well do they work in a team?" (Paragraph)
-     - "Overall peer rating" (Multiple choice: Exceeds, Meets, Below)
+     - Additional questions specific to peer reviews
+     - Examples:
+       - "Rate this peer's collaboration" (Scale 1-5)
+       - "How well do they work in a team?" (Paragraph)
+       - "Would you want to work with them again?" (Yes/No)
+       - "Overall peer rating" (Multiple choice: Exceeds, Meets, Below)
    
    - **Section: Direct Report Review Questions** (shown when Review Type = "Direct Report")
-     - "Rate this direct report's performance" (Scale 1-5)
-     - "What are their key strengths?" (Paragraph)
-     - "What areas need development?" (Paragraph)
-     - "How can they grow in their role?" (Paragraph)
-     - "Overall performance rating" (Multiple choice: Exceeds, Meets, Below)
+     - Additional questions specific to direct report reviews
+     - Examples:
+       - "Rate this direct report's performance" (Scale 1-5)
+       - "How can they grow in their role?" (Paragraph)
+       - "Recommendations for development" (Paragraph)
+       - "Overall performance rating" (Multiple choice: Exceeds, Meets, Below)
+   
+   **Form Structure:**
+   ```
+   [Section 1: Initial Questions - All Review Types]
+     Question 1: Reviewer Email (pre-filled)
+     Question 2: Reviewee Email (pre-filled)
+     Question 3: Reviewee Name
+     Question 4: Overall performance rating (shared)
+     Question 5: Key strengths (shared)
+     Question 6: Areas for improvement (shared)
+     Question 7: Review Type (pre-filled dropdown) ← Conditional logic starts here
+       ↓
+       ├─ If "Self" → [Section 2: Self Review Questions]
+       ├─ If "Manager" → [Section 3: Manager Review Questions]
+       ├─ If "Peer" → [Section 4: Peer Review Questions]
+       └─ If "Direct Report" → [Section 5: Direct Report Review Questions]
+   ```
    
    **See "Conditional Logic Setup" section below for detailed instructions.**
 
@@ -210,28 +243,35 @@ The actual review form that employees complete for self-review, manager review, 
 
 ## Conditional Logic Setup
 
-Since you're using different questions based on Review Type, you'll need to set up conditional sections in Google Forms.
+Since you're using different questions based on Review Type, you'll need to set up conditional sections in Google Forms. The Review Type question comes **after** your initial shared questions.
 
 ### Step-by-Step: Setting Up Conditional Logic
 
-1. **Create the Review Type Question First**
+1. **Add Initial Shared Questions First**
+   - Add all questions that **all review types** will answer
+   - These appear in the first section
+   - Examples: Overall rating, key strengths, areas for improvement
+
+2. **Create the Review Type Question (After Initial Questions)**
    - Add as Dropdown or Multiple choice
+   - Position it **after** your initial shared questions
    - Options: "Self", "Manager", "Peer", "Direct Report"
    - Make it required
+   - This question triggers the conditional logic
 
-2. **Create Sections for Each Review Type**
+3. **Create Sections for Each Review Type**
    - Click the "Add section" button (two rectangles icon)
-   - Name sections like:
+   - Create sections **after** the Review Type question:
      - "Self Review Questions"
      - "Manager Review Questions"
      - "Peer Review Questions"
      - "Direct Report Review Questions"
 
-3. **Add Questions to Each Section**
-   - Add your review questions to the appropriate section
-   - Each section should have questions specific to that review type
+4. **Add Questions to Each Conditional Section**
+   - Add questions specific to each review type
+   - These are the questions that differ between review types
 
-4. **Set Up Conditional Logic**
+5. **Set Up Conditional Logic**
    - Click on the section (e.g., "Self Review Questions")
    - Click the three dots menu (⋮) → "Go to section based on answer"
    - Select the "Review Type" question
@@ -241,28 +281,34 @@ Since you're using different questions based on Review Type, you'll need to set 
      - "Peer Review Questions" → Show when "Peer" is selected
      - "Direct Report Review Questions" → Show when "Direct Report" is selected
 
-5. **Set Default Section Flow**
-   - For sections that shouldn't be shown by default, set them to "Continue to next section" or "Submit form" based on other conditions
-   - The form will automatically show the correct section based on the pre-filled Review Type
+6. **Set Default Section Flow**
+   - After the Review Type question, set it to "Continue to next section"
+   - Each conditional section should end with "Submit form"
+   - The form will automatically route to the correct section based on the pre-filled Review Type
 
 ### Important Notes
 
-- **Pre-filled values work with conditional logic**: When Review Type is pre-filled via URL, the form will automatically show the correct section
+- **Pre-filled values work with conditional logic**: When Review Type is pre-filled via URL, the form will automatically show the correct section after initial questions
 - **Test thoroughly**: Submit test forms with each Review Type to ensure correct sections appear
-- **Question order matters**: Review Type question must come before conditional sections
-- **Section navigation**: Users will only see questions relevant to their review type
+- **Question order matters**: Initial shared questions → Review Type question → Conditional sections
+- **Section navigation**: Users answer shared questions, then see type-specific questions based on Review Type
 
 ### Example Structure
 
 ```
-Question 1: Reviewer Email (pre-filled, hidden)
-Question 2: Reviewee Email (pre-filled, hidden)
-Question 3: Review Type (pre-filled dropdown) ← Conditional logic starts here
+[Section 1: Initial Questions - All Review Types]
+  Question 1: Reviewer Email (pre-filled)
+  Question 2: Reviewee Email (pre-filled)
+  Question 3: Reviewee Name
+  Question 4: Overall performance rating (shared - all types answer)
+  Question 5: Key strengths (shared - all types answer)
+  Question 6: Areas for improvement (shared - all types answer)
+  Question 7: Review Type (pre-filled dropdown) ← Conditional logic starts here
     ↓
-    ├─ If "Self" → Self Review Questions Section
-    ├─ If "Manager" → Manager Review Questions Section
-    ├─ If "Peer" → Peer Review Questions Section
-    └─ If "Direct Report" → Direct Report Review Questions Section
+    ├─ If "Self" → [Section 2: Self Review Questions]
+    ├─ If "Manager" → [Section 3: Manager Review Questions]
+    ├─ If "Peer" → [Section 4: Peer Review Questions]
+    └─ If "Direct Report" → [Section 5: Direct Report Review Questions]
 ```
 
 ### Troubleshooting Conditional Logic
