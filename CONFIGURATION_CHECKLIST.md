@@ -61,7 +61,9 @@ Use this checklist to verify your Performance Review System is properly configur
 - [ ] Form ID copied
 - [ ] Reviewer Email question added (Short answer, required, hidden)
 - [ ] Reviewee Email question added (Short answer, required, hidden)
-- [ ] Review Type question added (Short answer, required, hidden)
+- [ ] Review Type question added (Dropdown/Multiple choice, required, pre-filled)
+- [ ] Review Type options: Self, Manager, Peer, Direct Report
+- [ ] Conditional sections set up for each review type
 - [ ] Review questions added (5-10 standard questions)
 - [ ] Form published and accessible
 - [ ] Test submission works
