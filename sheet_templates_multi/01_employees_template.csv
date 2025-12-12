@@ -1,0 +1,8 @@
+Employee Email,Employee Name,Manager Email,Manager Name,Is Manager,Department,Status
+john.doe@company.com,John Doe,jane.manager@company.com,Jane Manager,TRUE,Engineering,Active
+jane.manager@company.com,Jane Manager,,,TRUE,Engineering,Active
+alice.smith@company.com,Alice Smith,jane.manager@company.com,Jane Manager,FALSE,Engineering,Active
+bob.jones@company.com,Bob Jones,john.doe@company.com,John Doe,FALSE,Engineering,Active
+charlie.brown@company.com,Charlie Brown,jane.manager@company.com,Jane Manager,FALSE,Engineering,Active
+diana.prince@company.com,Diana Prince,john.doe@company.com,John Doe,FALSE,Engineering,Active
+

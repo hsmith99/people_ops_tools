@@ -1,0 +1,5 @@
+Employee Email,Employee Name,Manager Name,Phase 1 Status,Phase 2 Status,Phase 3 Self Review Status,Phase 3 Manager Review Status,Phase 3 Peer Reviews Status,Phase 3 Direct Reports Review Status,Overall Completion %,Days Since Start,Blockers/Issues
+alice.smith@company.com,Alice Smith,Jane Manager,Not Started,Not Started,Not Started,Not Started,Not Started,Not Started,0%,0,
+bob.jones@company.com,Bob Jones,John Doe,Not Started,Not Started,Not Started,Not Started,Not Started,Not Started,0%,0,
+charlie.brown@company.com,Charlie Brown,Jane Manager,Not Started,Not Started,Not Started,Not Started,Not Started,Not Started,0%,0,
+

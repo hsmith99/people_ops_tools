@@ -1,0 +1,5 @@
+Employee Email,Employee Name,Manager Email,Manager Name,Confirmation Status,Confirmed Peer Reviewer 1 Name,Confirmed Peer Reviewer 1 Email,Confirmed Peer Reviewer 2 Name,Confirmed Peer Reviewer 2 Email,Confirmed Peer Reviewer 3 Name,Confirmed Peer Reviewer 3 Email,Confirmed Peer Reviewer 4 Name,Confirmed Peer Reviewer 4 Email,Confirmed Peer Reviewer 5 Name,Confirmed Peer Reviewer 5 Email,Date Confirmed,Reminder Count,Last Reminder Sent
+alice.smith@company.com,Alice Smith,jane.manager@company.com,Jane Manager,Not Started,,,,,,,,,,,,,
+bob.jones@company.com,Bob Jones,john.doe@company.com,John Doe,Not Started,,,,,,,,,,,,,
+charlie.brown@company.com,Charlie Brown,jane.manager@company.com,Jane Manager,Not Started,,,,,,,,,,,,,
+

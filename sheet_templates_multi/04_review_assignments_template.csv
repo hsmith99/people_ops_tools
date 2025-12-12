@@ -1,0 +1,6 @@
+Reviewer Email,Reviewer Name,Reviewee Email,Reviewee Name,Review Type,Assignment Status,Date Assigned,Date Completed,Form Response ID
+alice.smith@company.com,Alice Smith,alice.smith@company.com,Alice Smith,Self,Not Started,,,,,
+alice.smith@company.com,Alice Smith,jane.manager@company.com,Jane Manager,Manager,Not Started,,,,,
+bob.jones@company.com,Bob Jones,bob.jones@company.com,Bob Jones,Self,Not Started,,,,,
+bob.jones@company.com,Bob Jones,john.doe@company.com,John Doe,Manager,Not Started,,,,,
+
