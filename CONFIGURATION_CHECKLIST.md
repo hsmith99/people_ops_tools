@@ -41,7 +41,7 @@ Use this checklist to verify your Performance Review System is properly configur
 - [ ] Employee Email question added (Short answer, required)
 - [ ] Employee Name question added (Short answer, required)
 - [ ] Peer Reviewer selection question added (Checkbox, required)
-- [ ] Employee list populated in checkbox options
+- [ ] Employee list populated in checkbox options (Format: "Name (email@company.com)" - see FORM_EMPLOYEE_LIST_FORMAT.md)
 - [ ] Form published and accessible
 - [ ] Test submission works
 
@@ -52,7 +52,7 @@ Use this checklist to verify your Performance Review System is properly configur
 - [ ] Employee Name question added (Short answer, required, hidden)
 - [ ] Selected Peer Reviewers info/question added
 - [ ] Confirm/Reselect question added (Checkbox, required)
-- [ ] Employee list populated in checkbox options
+- [ ] Employee list populated in checkbox options (Format: "Name (email@company.com)" - see FORM_EMPLOYEE_LIST_FORMAT.md)
 - [ ] Form published and accessible
 - [ ] Test submission works
 

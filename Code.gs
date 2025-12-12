@@ -307,17 +307,52 @@ function createFormUrl(formId, formName, prefillData) {
 }
 
 /**
+ * Extract email from form response value
+ * Handles formats: "Name (email)", "email", or just "email"
+ * @param {string} value - The form response value
+ * @returns {string} Email address
+ */
+function extractEmailFromResponse(value) {
+  if (!value) return '';
+  
+  // Check if format is "Name (email@domain.com)"
+  const emailMatch = value.match(/\(([^)]+@[^)]+)\)/);
+  if (emailMatch) {
+    return emailMatch[1].trim();
+  }
+  
+  // Check if it's already just an email
+  if (value.includes('@')) {
+    return value.trim();
+  }
+  
+  // If it's just a name, try to look it up
+  const employees = getEmployeeData();
+  const employee = employees.find(emp => emp.name === value);
+  if (employee) {
+    return employee.email;
+  }
+  
+  // Fallback: return as-is (may cause issues)
+  Logger.log(`Warning: Could not extract email from: ${value}`);
+  return value;
+}
+
+/**
  * Store peer reviewers in separate columns
  * @param {Sheet} sheet - The sheet to update
  * @param {number} rowIndex - Row index (1-based)
- * @param {Array} peerEmails - Array of peer email addresses
+ * @param {Array} peerValues - Array of peer values (can be emails, names, or "Name (email)" format)
  */
-function storePeerReviewers(sheet, rowIndex, peerEmails, startColIndex) {
+function storePeerReviewers(sheet, rowIndex, peerValues, startColIndex) {
   const employees = getEmployeeData();
   const emailToName = {};
   employees.forEach(emp => {
     emailToName[emp.email] = emp.name;
   });
+  
+  // Extract emails from form responses (handles "Name (email)" format)
+  const peerEmails = peerValues.map(value => extractEmailFromResponse(value));
   
   // Clear existing peer reviewer columns first
   for (let i = 0; i < CONFIG.REQUIRED_PEER_REVIEWERS; i++) {
