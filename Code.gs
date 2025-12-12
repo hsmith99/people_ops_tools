@@ -375,6 +375,62 @@ function getAllFormEntryIds() {
   Logger.log('\n');
   
   Logger.log('✅ Done! Check the logs above for question titles and item IDs.');
+  Logger.log('\n');
+  Logger.log('💡 To get ENTRY IDs (for URL pre-filling):');
+  Logger.log('   1. Open each form in browser');
+  Logger.log('   2. Right-click → View Page Source');
+  Logger.log('   3. Search for question text');
+  Logger.log('   4. Find entry.XXXXX in the HTML');
+  Logger.log('   5. Update FORM_ENTRY_IDS in Code.gs with those numbers');
+  Logger.log('   See ENTRY_ID_SETUP_GUIDE.md for detailed instructions');
+}
+
+/**
+ * Test if entry IDs are working correctly
+ * Creates test URLs that you can open to verify pre-filling works
+ */
+function testEntryIds() {
+  Logger.log('🧪 Testing Entry IDs Configuration...\n');
+  
+  // Test Peer Selection Form
+  if (CONFIG.PEER_SELECTION_FORM_ID && CONFIG.PEER_SELECTION_FORM_ID !== 'YOUR_PEER_SELECTION_FORM_ID') {
+    Logger.log('=== PEER SELECTION FORM ===');
+    const peerUrl = createFormUrl(CONFIG.PEER_SELECTION_FORM_ID, 'Peer Selection Form', {
+      'Employee Email': 'test@example.com',
+      'Employee Name': 'Test User'
+    });
+    Logger.log('Test URL: ' + peerUrl);
+    Logger.log('→ Open this URL to verify email/name are pre-filled\n');
+  }
+  
+  // Test Manager Confirmation Form
+  if (CONFIG.MANAGER_CONFIRMATION_FORM_ID && CONFIG.MANAGER_CONFIRMATION_FORM_ID !== 'YOUR_MANAGER_CONFIRMATION_FORM_ID') {
+    Logger.log('=== MANAGER CONFIRMATION FORM ===');
+    const managerUrl = createFormUrl(CONFIG.MANAGER_CONFIRMATION_FORM_ID, 'Manager Confirmation Form', {
+      'Employee Email': 'test@example.com',
+      'Employee Name': 'Test User'
+    });
+    Logger.log('Test URL: ' + managerUrl);
+    Logger.log('→ Open this URL to verify email/name are pre-filled\n');
+  }
+  
+  // Test Review Form
+  if (CONFIG.REVIEW_FORM_ID && CONFIG.REVIEW_FORM_ID !== 'YOUR_REVIEW_FORM_ID') {
+    Logger.log('=== REVIEW FORM ===');
+    const reviewUrl = createFormUrl(CONFIG.REVIEW_FORM_ID, 'Review Form', {
+      'Reviewer Email': 'reviewer@example.com',
+      'Reviewee Email': 'reviewee@example.com',
+      'Review Type': 'Self Review'
+    });
+    Logger.log('Test URL: ' + reviewUrl);
+    Logger.log('→ Open this URL to verify fields are pre-filled\n');
+  }
+  
+  Logger.log('✅ Test complete!');
+  Logger.log('   If fields are NOT pre-filled, you need to:');
+  Logger.log('   1. Find entry IDs from form HTML (see ENTRY_ID_SETUP_GUIDE.md)');
+  Logger.log('   2. Update FORM_ENTRY_IDS in Code.gs');
+  Logger.log('   3. Run this test again');
 }
 
 /**
