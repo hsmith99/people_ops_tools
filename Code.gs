@@ -258,29 +258,123 @@ const FORM_ENTRY_IDS = {
 
 /**
  * Helper function to get entry IDs from a form
+ * 
+ * Usage:
+ *   getFormEntryIds('FORM_ID_HERE')
+ *   OR use convenience functions:
+ *   getPeerSelectionFormEntryIds()
+ *   getManagerConfirmationFormEntryIds()
+ *   getReviewFormEntryIds()
  */
 function getFormEntryIds(formId) {
-  const form = FormApp.openById(formId);
-  const items = form.getItems();
-  const mapping = {};
+  if (!formId || formId === '') {
+    Logger.log('❌ Error: Form ID is required');
+    Logger.log('Usage: getFormEntryIds("FORM_ID_HERE")');
+    Logger.log('Or use: getPeerSelectionFormEntryIds()');
+    return null;
+  }
   
-  Logger.log(`Form: ${form.getTitle()}`);
-  Logger.log('---');
-  
-  items.forEach((item, index) => {
-    const title = item.getTitle();
-    const itemId = item.getId();
-    Logger.log(`Question ${index + 1}: "${title}"`);
-    Logger.log(`Item ID: ${itemId}`);
+  try {
+    const form = FormApp.openById(formId);
+    const items = form.getItems();
+    const mapping = {};
+    
+    Logger.log(`\n📋 Form: ${form.getTitle()}`);
+    Logger.log(`Form ID: ${formId}`);
     Logger.log('---');
     
-    mapping[title] = {
-      itemId: itemId,
-      index: index
-    };
-  });
+    if (items.length === 0) {
+      Logger.log('⚠️  No questions found in this form');
+      return mapping;
+    }
+    
+    items.forEach((item, index) => {
+      const title = item.getTitle();
+      const itemId = item.getId();
+      const type = item.getType();
+      const typeName = Object.keys(FormApp.ItemType).find(key => FormApp.ItemType[key] === type) || type;
+      
+      Logger.log(`Question ${index + 1}: "${title}"`);
+      Logger.log(`   Type: ${typeName}`);
+      Logger.log(`   Item ID: ${itemId}`);
+      Logger.log('---');
+      
+      mapping[title] = {
+        itemId: itemId,
+        index: index,
+        type: typeName
+      };
+    });
+    
+    Logger.log('\n💡 Note: Item IDs shown above are NOT the same as entry IDs used in URLs.');
+    Logger.log('   To get entry IDs for URL pre-filling, you need to:');
+    Logger.log('   1. Open the form in browser');
+    Logger.log('   2. Right-click → View Page Source');
+    Logger.log('   3. Search for the question text');
+    Logger.log('   4. Find entry.XXXXX in the HTML');
+    Logger.log('   OR use the form\'s HTML source to find entry IDs');
+    
+    return mapping;
+  } catch (error) {
+    Logger.log(`❌ Error accessing form: ${error.toString()}`);
+    Logger.log(`   Form ID: ${formId}`);
+    Logger.log(`   Make sure the form ID is correct and you have edit access.`);
+    return null;
+  }
+}
+
+/**
+ * Convenience function: Get entry IDs for Peer Selection Form
+ */
+function getPeerSelectionFormEntryIds() {
+  if (!CONFIG.PEER_SELECTION_FORM_ID || CONFIG.PEER_SELECTION_FORM_ID === 'YOUR_PEER_SELECTION_FORM_ID') {
+    Logger.log('❌ Peer Selection Form ID not configured in CONFIG');
+    return null;
+  }
+  return getFormEntryIds(CONFIG.PEER_SELECTION_FORM_ID);
+}
+
+/**
+ * Convenience function: Get entry IDs for Manager Confirmation Form
+ */
+function getManagerConfirmationFormEntryIds() {
+  if (!CONFIG.MANAGER_CONFIRMATION_FORM_ID || CONFIG.MANAGER_CONFIRMATION_FORM_ID === 'YOUR_MANAGER_CONFIRMATION_FORM_ID') {
+    Logger.log('❌ Manager Confirmation Form ID not configured in CONFIG');
+    return null;
+  }
+  return getFormEntryIds(CONFIG.MANAGER_CONFIRMATION_FORM_ID);
+}
+
+/**
+ * Convenience function: Get entry IDs for Review Form
+ */
+function getReviewFormEntryIds() {
+  if (!CONFIG.REVIEW_FORM_ID || CONFIG.REVIEW_FORM_ID === 'YOUR_REVIEW_FORM_ID') {
+    Logger.log('❌ Review Form ID not configured in CONFIG');
+    return null;
+  }
+  return getFormEntryIds(CONFIG.REVIEW_FORM_ID);
+}
+
+/**
+ * Get entry IDs for all forms
+ */
+function getAllFormEntryIds() {
+  Logger.log('🔍 Getting entry IDs for all forms...\n');
   
-  return mapping;
+  Logger.log('=== PEER SELECTION FORM ===');
+  getPeerSelectionFormEntryIds();
+  Logger.log('\n');
+  
+  Logger.log('=== MANAGER CONFIRMATION FORM ===');
+  getManagerConfirmationFormEntryIds();
+  Logger.log('\n');
+  
+  Logger.log('=== REVIEW FORM ===');
+  getReviewFormEntryIds();
+  Logger.log('\n');
+  
+  Logger.log('✅ Done! Check the logs above for question titles and item IDs.');
 }
 
 /**
