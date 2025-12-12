@@ -1261,6 +1261,209 @@ function updateAllFormEmployeeLists() {
 }
 
 /**
+ * Extract form ID from a Google Forms URL
+ * Handles different URL formats:
+ * - https://docs.google.com/forms/d/FORM_ID/edit
+ * - https://docs.google.com/forms/d/e/FORM_ID/viewform
+ * - https://docs.google.com/forms/d/e/FORM_ID/viewform?usp=sharing&ouid=...
+ * 
+ * Usage: extractFormId('FULL_URL_HERE')
+ */
+function extractFormId(url) {
+  // Remove query parameters
+  const cleanUrl = url.split('?')[0];
+  
+  // Try to match /d/FORM_ID/ or /d/e/FORM_ID/
+  const match = cleanUrl.match(/\/forms\/d\/(?:e\/)?([a-zA-Z0-9_-]+)/);
+  
+  if (match && match[1]) {
+    return match[1];
+  }
+  
+  // If no match, try to extract any long alphanumeric string
+  const fallbackMatch = cleanUrl.match(/([a-zA-Z0-9_-]{20,})/);
+  if (fallbackMatch) {
+    return fallbackMatch[1];
+  }
+  
+  return null;
+}
+
+/**
+ * Test form access and verify form ID
+ * Use this to diagnose permission issues
+ * 
+ * Usage: testFormAccess('FORM_ID_HERE') or testFormAccess('FULL_URL_HERE')
+ */
+function testFormAccess(formIdOrUrl) {
+  let formId = formIdOrUrl;
+  
+  // If it's a URL, extract the form ID
+  if (formIdOrUrl.includes('docs.google.com')) {
+    formId = extractFormId(formIdOrUrl);
+    Logger.log(`Extracted Form ID from URL: ${formId}`);
+    if (!formId) {
+      Logger.log('❌ Could not extract form ID from URL');
+      return;
+    }
+  }
+  
+  Logger.log(`\n🔍 Testing access to form: ${formId}`);
+  Logger.log('---');
+  
+  try {
+    const form = FormApp.openById(formId);
+    Logger.log(`✅ Successfully opened form!`);
+    Logger.log(`   Title: "${form.getTitle()}"`);
+    Logger.log(`   Form ID: ${form.getId()}`);
+    Logger.log(`   Published URL: ${form.getPublishedUrl()}`);
+    Logger.log(`   Edit URL: ${form.getEditUrl()}`);
+    Logger.log(`   Number of items: ${form.getItems().length}`);
+    return true;
+  } catch (error) {
+    Logger.log(`❌ Error accessing form: ${error.toString()}`);
+    Logger.log(`   Form ID used: ${formId}`);
+    Logger.log('');
+    Logger.log('🔧 Troubleshooting:');
+    Logger.log('   1. Make sure the form ID is correct');
+    Logger.log('   2. Make sure you have EDIT access to the form (not just view)');
+    Logger.log('   3. Try opening the form in your browser and verify you can edit it');
+    Logger.log('   4. If the form is in a shared drive, make sure the script has access');
+    Logger.log('   5. Try running this from the form\'s own script editor instead');
+    return false;
+  }
+}
+
+/**
+ * Diagnostic function: List all questions in a form
+ * Use this to find the exact question titles for updateFormEmployeeList()
+ * 
+ * Usage: listFormQuestions('FORM_ID_HERE') or listFormQuestions('FULL_URL_HERE')
+ * Or: listAllFormQuestions() to list all three forms
+ */
+function listFormQuestions(formIdOrUrl) {
+  let formId = formIdOrUrl;
+  
+  // If it's a URL, extract the form ID
+  if (formIdOrUrl.includes('docs.google.com')) {
+    formId = extractFormId(formIdOrUrl);
+    if (!formId) {
+      Logger.log('❌ Could not extract form ID from URL');
+      return;
+    }
+  }
+  
+  try {
+    const form = FormApp.openById(formId);
+    Logger.log(`\n📋 Questions in "${form.getTitle()}":`);
+    Logger.log(`Form ID: ${formId}`);
+    Logger.log('---');
+    
+    const items = form.getItems();
+    
+    if (items.length === 0) {
+      Logger.log('⚠️  No questions found in this form.');
+      return;
+    }
+    
+    items.forEach((item, idx) => {
+      const type = item.getType();
+      const title = item.getTitle();
+      const typeName = Object.keys(FormApp.ItemType).find(key => FormApp.ItemType[key] === type) || type;
+      
+      Logger.log(`${idx + 1}. "${title}"`);
+      Logger.log(`   Type: ${typeName}`);
+      
+      // If it's a checkbox, show current choices
+      if (type === FormApp.ItemType.CHECKBOX) {
+        const checkbox = item.asCheckboxItem();
+        const choices = checkbox.getChoices();
+        Logger.log(`   Current choices: ${choices.length}`);
+        if (choices.length > 0 && choices.length <= 5) {
+          choices.forEach((choice, cIdx) => {
+            Logger.log(`      ${cIdx + 1}. ${choice.getValue()}`);
+          });
+        } else if (choices.length > 5) {
+          Logger.log(`      (Showing first 5 of ${choices.length})`);
+          choices.slice(0, 5).forEach((choice, cIdx) => {
+            Logger.log(`      ${cIdx + 1}. ${choice.getValue()}`);
+          });
+        }
+      }
+      
+      Logger.log('');
+    });
+    
+    Logger.log('---');
+    Logger.log('✅ Use these exact titles (case-sensitive) in updateFormEmployeeList()');
+    
+  } catch (error) {
+    Logger.log(`❌ Error accessing form: ${error.toString()}`);
+    Logger.log(`   Form ID: ${formId}`);
+    Logger.log(`   Make sure the form ID is correct and you have edit access.`);
+    Logger.log('');
+    Logger.log('💡 Try running: testFormAccess("' + formId + '") for more details');
+  }
+}
+
+/**
+ * List all questions in all three forms
+ * Convenience function to diagnose all forms at once
+ */
+function listAllFormQuestions() {
+  Logger.log('🔍 Listing all questions in all forms...\n');
+  
+  if (CONFIG.PEER_SELECTION_FORM_ID && CONFIG.PEER_SELECTION_FORM_ID !== 'YOUR_PEER_SELECTION_FORM_ID') {
+    Logger.log('Testing Peer Selection Form access first...');
+    if (testFormAccess(CONFIG.PEER_SELECTION_FORM_ID)) {
+      listFormQuestions(CONFIG.PEER_SELECTION_FORM_ID);
+    }
+    Logger.log('\n');
+  }
+  
+  if (CONFIG.MANAGER_CONFIRMATION_FORM_ID && CONFIG.MANAGER_CONFIRMATION_FORM_ID !== 'YOUR_MANAGER_CONFIRMATION_FORM_ID') {
+    Logger.log('Testing Manager Confirmation Form access first...');
+    if (testFormAccess(CONFIG.MANAGER_CONFIRMATION_FORM_ID)) {
+      listFormQuestions(CONFIG.MANAGER_CONFIRMATION_FORM_ID);
+    }
+    Logger.log('\n');
+  }
+  
+  if (CONFIG.REVIEW_FORM_ID && CONFIG.REVIEW_FORM_ID !== 'YOUR_REVIEW_FORM_ID') {
+    Logger.log('Testing Review Form access first...');
+    if (testFormAccess(CONFIG.REVIEW_FORM_ID)) {
+      listFormQuestions(CONFIG.REVIEW_FORM_ID);
+    }
+    Logger.log('\n');
+  }
+  
+  Logger.log('✅ Done! Check the titles above and update updateAllFormEmployeeLists() if needed.');
+}
+
+/**
+ * Test access to all forms configured in CONFIG
+ * Use this to diagnose permission issues
+ */
+function testAllFormAccess() {
+  Logger.log('🔍 Testing access to all configured forms...\n');
+  
+  if (CONFIG.PEER_SELECTION_FORM_ID && CONFIG.PEER_SELECTION_FORM_ID !== 'YOUR_PEER_SELECTION_FORM_ID') {
+    testFormAccess(CONFIG.PEER_SELECTION_FORM_ID);
+    Logger.log('');
+  }
+  
+  if (CONFIG.MANAGER_CONFIRMATION_FORM_ID && CONFIG.MANAGER_CONFIRMATION_FORM_ID !== 'YOUR_MANAGER_CONFIRMATION_FORM_ID') {
+    testFormAccess(CONFIG.MANAGER_CONFIRMATION_FORM_ID);
+    Logger.log('');
+  }
+  
+  if (CONFIG.REVIEW_FORM_ID && CONFIG.REVIEW_FORM_ID !== 'YOUR_REVIEW_FORM_ID') {
+    testFormAccess(CONFIG.REVIEW_FORM_ID);
+    Logger.log('');
+  }
+}
+
+/**
  * Set up form submission triggers programmatically
  * 
  * This function creates form submission triggers for all three forms.
