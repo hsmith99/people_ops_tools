@@ -47,18 +47,17 @@ Fill in the trigger settings:
 
 **Event source:**
 - Click the dropdown
-- Select: **"From form"**
-
-**Event type:**
-- Click the dropdown
-- Select: **"On form submit"**
+- Select: **"On form submit"** (this option appears when you have forms linked to your project)
+- **Note**: If you don't see "On form submit", you may need to set up the trigger from the Form's Apps Script instead (see Alternative Method below)
 
 **Form:**
-- Click the dropdown
-- Select: **Your Review Form** (the one you created for performance reviews)
+- After selecting "On form submit", a "Form" dropdown should appear
+- Select: **Your Performance Review Form** (the one you created)
 
 **Failure notification settings:**
 - Choose: **"Notify me immediately"** (so you know if something goes wrong)
+
+**Important**: If "On form submit" doesn't appear in the event source dropdown, use the Alternative Method below.
 
 ### Step 5: Save the Trigger
 
@@ -174,32 +173,42 @@ After setting up triggers:
 - Run the function manually once to trigger authorization
 - Check that you're the owner/editor of the form
 
-## Alternative: Programmatic Trigger Setup
+## Quick Setup: Use the Programmatic Method (Easiest!)
 
-You can also set up triggers programmatically (though manual setup is recommended for first time):
+If you're having trouble with the manual trigger setup, **use the programmatic method** - it's actually easier!
 
+### Step 1: Make Sure Form IDs Are Configured
+
+In your `Code.gs`, update the CONFIG section with your actual form IDs:
 ```javascript
-/**
- * Set up form submission triggers programmatically
- * Run this once to create all triggers
- */
-function setupFormTriggers() {
-  // Delete existing triggers (optional)
-  const triggers = ScriptApp.getProjectTriggers();
-  triggers.forEach(trigger => {
-    if (trigger.getHandlerFunction().includes('Submit')) {
-      ScriptApp.deleteTrigger(trigger);
-    }
-  });
-  
-  // Note: Form submission triggers must be set up manually
-  // or via FormApp API (more complex)
-  Logger.log('Form submission triggers must be set up manually in Triggers UI');
-  Logger.log('See TRIGGER_SETUP_EXPLAINED.md for instructions');
-}
+PEER_SELECTION_FORM_ID: 'your-actual-form-id-here',
+MANAGER_CONFIRMATION_FORM_ID: 'your-actual-form-id-here',
+REVIEW_FORM_ID: 'your-actual-form-id-here',
 ```
 
-**Note**: Form submission triggers are easier to set up manually through the UI.
+### Step 2: Run the Setup Function
+
+1. In Apps Script, find the function `setupFormSubmissionTriggers()` (it's in Code.gs)
+2. Click the **Run** button (▶) in the toolbar
+3. Select `setupFormSubmissionTriggers` from the dropdown
+4. Click **Run**
+5. Authorize permissions when prompted
+6. Check the execution log - you should see:
+   ```
+   ✅ Created trigger for Peer Selection Form
+   ✅ Created trigger for Manager Confirmation Form
+   ✅ Created trigger for Review Form
+   ```
+
+### Step 3: Verify Triggers Were Created
+
+1. Go to **Triggers** page (⏰ icon)
+2. You should see all three triggers listed:
+   - `onPeerSelectionSubmit` - On form submit
+   - `onManagerConfirmationSubmit` - On form submit
+   - `onReviewFormSubmit` - On form submit
+
+**That's it!** This method is often easier than manual setup.
 
 ## Summary
 

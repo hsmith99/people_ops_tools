@@ -1259,3 +1259,71 @@ function updateAllFormEmployeeLists() {
   Logger.log('---');
   Logger.log('Update complete!');
 }
+
+/**
+ * Set up form submission triggers programmatically
+ * 
+ * This function creates form submission triggers for all three forms.
+ * Run this once after configuring your form IDs in CONFIG.
+ * 
+ * Usage: setupFormSubmissionTriggers()
+ */
+function setupFormSubmissionTriggers() {
+  // Delete existing form submission triggers (optional)
+  const triggers = ScriptApp.getProjectTriggers();
+  triggers.forEach(trigger => {
+    if (trigger.getEventType() === ScriptApp.EventType.ON_FORM_SUBMIT) {
+      ScriptApp.deleteTrigger(trigger);
+      Logger.log(`Deleted existing trigger: ${trigger.getHandlerFunction()}`);
+    }
+  });
+  
+  // Create trigger for Peer Selection Form
+  if (CONFIG.PEER_SELECTION_FORM_ID && CONFIG.PEER_SELECTION_FORM_ID !== 'YOUR_PEER_SELECTION_FORM_ID') {
+    try {
+      const peerForm = FormApp.openById(CONFIG.PEER_SELECTION_FORM_ID);
+      ScriptApp.newTrigger('onPeerSelectionSubmit')
+        .onFormSubmit()
+        .create();
+      Logger.log('✅ Created trigger for Peer Selection Form');
+    } catch (error) {
+      Logger.log(`❌ Error creating trigger for Peer Selection Form: ${error.toString()}`);
+    }
+  } else {
+    Logger.log('⚠️  Peer Selection Form ID not configured');
+  }
+  
+  // Create trigger for Manager Confirmation Form
+  if (CONFIG.MANAGER_CONFIRMATION_FORM_ID && CONFIG.MANAGER_CONFIRMATION_FORM_ID !== 'YOUR_MANAGER_CONFIRMATION_FORM_ID') {
+    try {
+      const managerForm = FormApp.openById(CONFIG.MANAGER_CONFIRMATION_FORM_ID);
+      ScriptApp.newTrigger('onManagerConfirmationSubmit')
+        .onFormSubmit()
+        .create();
+      Logger.log('✅ Created trigger for Manager Confirmation Form');
+    } catch (error) {
+      Logger.log(`❌ Error creating trigger for Manager Confirmation Form: ${error.toString()}`);
+    }
+  } else {
+    Logger.log('⚠️  Manager Confirmation Form ID not configured');
+  }
+  
+  // Create trigger for Review Form
+  if (CONFIG.REVIEW_FORM_ID && CONFIG.REVIEW_FORM_ID !== 'YOUR_REVIEW_FORM_ID') {
+    try {
+      const reviewForm = FormApp.openById(CONFIG.REVIEW_FORM_ID);
+      ScriptApp.newTrigger('onReviewFormSubmit')
+        .onFormSubmit()
+        .create();
+      Logger.log('✅ Created trigger for Review Form');
+    } catch (error) {
+      Logger.log(`❌ Error creating trigger for Review Form: ${error.toString()}`);
+    }
+  } else {
+    Logger.log('⚠️  Review Form ID not configured');
+  }
+  
+  Logger.log('---');
+  Logger.log('Form submission trigger setup complete!');
+  Logger.log('Check the Triggers page to verify all triggers were created.');
+}
