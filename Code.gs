@@ -285,25 +285,45 @@ function getFormEntryIds(formId) {
 
 /**
  * Create form URL with pre-filled fields
+ * If entry IDs are not configured, returns the base form URL (users will need to enter info manually)
  */
 function createFormUrl(formId, formName, prefillData) {
-  const form = FormApp.openById(formId);
-  const url = form.getPublishedUrl();
-  const entryMap = FORM_ENTRY_IDS[formName] || {};
-  
-  const params = Object.keys(prefillData)
-    .filter(key => entryMap[key] && entryMap[key] !== '')
-    .map(key => {
-      const entryId = entryMap[key];
-      return `entry.${entryId}=${encodeURIComponent(prefillData[key])}`;
-    })
-    .join('&');
-  
-  if (!params) {
-    Logger.log(`Warning: No entry IDs configured for form "${formName}". URL will not have pre-filled fields.`);
+  try {
+    const form = FormApp.openById(formId);
+    const url = form.getPublishedUrl();
+    const entryMap = FORM_ENTRY_IDS[formName] || {};
+    
+    // Filter out empty entry IDs and build params
+    const params = Object.keys(prefillData)
+      .filter(key => {
+        const entryId = entryMap[key];
+        // Only include if entry ID exists and is not empty
+        return entryId && entryId !== '' && entryId.trim() !== '';
+      })
+      .map(key => {
+        const entryId = entryMap[key];
+        return `entry.${entryId}=${encodeURIComponent(prefillData[key])}`;
+      })
+      .join('&');
+    
+    if (!params) {
+      Logger.log(`ℹ️  No entry IDs configured for form "${formName}". URL will not have pre-filled fields. Users will need to enter information manually.`);
+      return url; // Return base URL without pre-filled params
+    }
+    
+    return `${url}?${params}`;
+  } catch (error) {
+    Logger.log(`⚠️  Error creating form URL for "${formName}": ${error.toString()}`);
+    Logger.log(`   Returning base form URL. Users will need to enter information manually.`);
+    // Return base URL even if there's an error
+    try {
+      const form = FormApp.openById(formId);
+      return form.getPublishedUrl();
+    } catch (e) {
+      Logger.log(`❌ Could not get form URL: ${e.toString()}`);
+      return ''; // Return empty string as last resort
+    }
   }
-  
-  return params ? `${url}?${params}` : url;
 }
 
 /**
