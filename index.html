@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Review System - Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .nav {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .nav h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+        }
+        
+        .nav a {
+            display: block;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .nav a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .section ul, .section ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .badge.new {
+            background: #28a745;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+            margin-top: 60px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Performance Review System</h1>
+        <p>Complete Documentation & Setup Guide</p>
+    </header>
+    
+    <div class="container">
+        <div class="nav">
+            <h2>📚 Documentation Index</h2>
+            <ul>
+                <li><a href="#overview">System Overview</a></li>
+                <li><a href="#quick-start">Quick Start Guide</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#setup">Setup Instructions</a></li>
+                <li><a href="#forms">Form Setup</a></li>
+                <li><a href="#workflow">Workflow Examples</a></li>
+                <li><a href="#migration">Migration Guide</a></li>
+                <li><a href="#files">File Structure</a></li>
+            </ul>
+        </div>
+        
+        <div class="section" id="overview">
+            <h2>System Overview</h2>
+            <p>The Performance Review System is a comprehensive Google Workspace-based solution that automates the entire performance review process from peer selection to completion tracking.</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🎯 Multi-Sheet Architecture</h4>
+                    <p>Separate sheets for each phase improve organization and scalability</p>
+                </div>
+                <div class="feature-card">
+                    <h4>👥 Peer Reviewer Management</h4>
+                    <p>Individual columns for each of the 5 peer reviewers (Name + Email)</p>
+                </div>
+                <div class="feature-card">
+                    <h4>✅ Manager Confirmation</h4>
+                    <p>Managers review and confirm peer reviewer selections</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Review Tracking</h4>
+                    <p>One row per review assignment for detailed tracking</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔔 Automated Reminders</h4>
+                    <p>Configurable reminder system for incomplete reviews</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📈 Scalable Design</h4>
+                    <p>Handles teams from 10 to 1000+ employees efficiently</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section" id="quick-start">
+            <h2>Quick Start Guide</h2>
+            <p>Get your performance review system up and running in about 30 minutes.</p>
+            
+            <h3>Step 1: Create Google Sheet (5 minutes)</h3>
+            <ol>
+                <li>Create a new Google Sheet named "Performance Review System"</li>
+                <li>Run the <code>setup()</code> function in Apps Script to create all sheets</li>
+                <li>Add your employee data to the Employees sheet</li>
+            </ol>
+            
+            <h3>Step 2: Create Google Forms (15 minutes)</h3>
+            <p>Create 3 forms following the detailed guide in <code>FORM_SETUP.md</code>:</p>
+            <ul>
+                <li>Peer Reviewer Selection Form</li>
+                <li>Manager Confirmation Form</li>
+                <li>Performance Review Form</li>
+            </ul>
+            
+            <h3>Step 3: Configure Apps Script (5 minutes)</h3>
+            <ol>
+                <li>Copy <code>Code.gs</code> into Apps Script</li>
+                <li>Update form IDs in CONFIG section</li>
+                <li>Update FORM_ENTRY_IDS with your actual entry IDs</li>
+                <li>Run <code>setup()</code> to initialize</li>
+            </ol>
+            
+            <h3>Step 4: Set Up Triggers (3 minutes)</h3>
+            <p>Configure automated triggers for form submissions and reminders. See <code>TRIGGERS_SETUP.md</code> for details.</p>
+            
+            <div class="highlight">
+                <strong>📖 Full Instructions:</strong> See <code>QUICK_START.md</code> for complete step-by-step guide with screenshots and troubleshooting tips.
+            </div>
+        </div>
+        
+        <div class="section" id="architecture">
+            <h2>System Architecture</h2>
+            <p>The system uses a multi-sheet architecture for better organization:</p>
+            
+            <h3>Sheet Structure</h3>
+            <ul>
+                <li><strong>Employees Sheet</strong>: Master employee data (7 columns)</li>
+                <li><strong>Peer Selection Sheet</strong>: Phase 1 - Employee peer selection (16 columns)</li>
+                <li><strong>Manager Confirmation Sheet</strong>: Phase 2 - Manager confirmation (18 columns)</li>
+                <li><strong>Review Assignments Sheet</strong>: Phase 3 - All review assignments (9 columns, one row per review)</li>
+                <li><strong>Dashboard Sheet</strong>: Optional summary and reporting</li>
+            </ul>
+            
+            <h3>Data Flow</h3>
+            <div class="code-block">
+Employees Sheet → Peer Selection → Manager Confirmation → Review Assignments
+     ↓                ↓                    ↓                      ↓
+  Master Data    Employee Selects    Manager Confirms    Reviews Assigned
+                5 Peer Reviewers     5 Peer Reviewers    (One per review)
+            </div>
+            
+            <div class="highlight">
+                <strong>📋 Detailed Structure:</strong> See <code>sheet_structure_multi.md</code> for complete column definitions and data types.
+            </div>
+        </div>
+        
+        <div class="section" id="setup">
+            <h2>Setup Instructions</h2>
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Google Workspace account with Sheets, Forms, and Apps Script access</li>
+                <li>Gmail API enabled (usually enabled by default)</li>
+                <li>List of all employees with their emails and manager relationships</li>
+            </ul>
+            
+            <h3>Configuration Checklist</h3>
+            <p>Use <code>CONFIGURATION_CHECKLIST.md</code> to verify your setup:</p>
+            <ul>
+                <li>✅ Google Sheet created with all required sheets</li>
+                <li>✅ Google Forms created and configured</li>
+                <li>✅ Apps Script code installed and configured</li>
+                <li>✅ Permissions granted</li>
+                <li>✅ Triggers set up</li>
+                <li>✅ Tested end-to-end</li>
+            </ul>
+        </div>
+        
+        <div class="section" id="forms">
+            <h2>Form Setup</h2>
+            <p>Three Google Forms are required. <strong>Important:</strong> Google Forms does not support truly hidden fields - fields will be pre-filled but visible to users.</p>
+            
+            <h3>Form 1: Peer Reviewer Selection</h3>
+            <ul>
+                <li>Employee Email (pre-filled)</li>
+                <li>Employee Name (pre-filled)</li>
+                <li>Select Peer Reviewers (must select exactly 5)</li>
+            </ul>
+            
+            <h3>Form 2: Manager Confirmation</h3>
+            <ul>
+                <li>Employee Email (pre-filled)</li>
+                <li>Employee Name (pre-filled)</li>
+                <li>Confirm/Reselect Peer Reviewers (checkbox list)</li>
+            </ul>
+            
+            <h3>Form 3: Performance Review</h3>
+            <ul>
+                <li>Reviewer Email (pre-filled)</li>
+                <li>Reviewee Email (pre-filled)</li>
+                <li>Review Type (pre-filled)</li>
+                <li>Your standard review questions</li>
+            </ul>
+            
+            <div class="highlight">
+                <strong>📝 Detailed Setup:</strong> See <code>FORM_SETUP.md</code> for complete form configuration instructions and <code>URL_PREFILL_GUIDE.md</code> for URL pre-filling setup.
+            </div>
+        </div>
+        
+        <div class="section" id="workflow">
+            <h2>Workflow Examples</h2>
+            <h3>Manager Confirmation Workflow</h3>
+            <p>See <code>MANAGER_CONFIRMATION_EXAMPLE.md</code> for a detailed walkthrough showing:</p>
+            <ul>
+                <li>How employees select peer reviewers</li>
+                <li>How managers receive confirmation requests</li>
+                <li>How managers confirm or modify selections</li>
+                <li>How confirmed peers feed into review assignments</li>
+            </ul>
+            
+            <h3>Complete Review Cycle</h3>
+            <ol>
+                <li><strong>Week 1:</strong> Run <code>sendPeerSelectionInvites()</code> - Employees select peers</li>
+                <li><strong>Week 2:</strong> Run <code>sendManagerConfirmationEmails()</code> - Managers confirm</li>
+                <li><strong>Week 3:</strong> Run <code>sendReviewAssignments()</code> - Reviews assigned</li>
+                <li><strong>Ongoing:</strong> Automated reminders sent via triggers</li>
+            </ol>
+        </div>
+        
+        <div class="section" id="migration">
+            <h2>Migration Guide</h2>
+            <p>If you're upgrading from the old single-sheet version, see <code>MIGRATION_GUIDE.md</code> for step-by-step migration instructions.</p>
+            
+            <h3>Key Changes</h3>
+            <ul>
+                <li>Multi-sheet architecture (was: single sheet)</li>
+                <li>Separate columns for each peer reviewer (was: comma-separated)</li>
+                <li>One row per review assignment (was: aggregated per employee)</li>
+            </ul>
+            
+            <div class="highlight">
+                <strong>⚠️ Breaking Change:</strong> The new architecture is not backward compatible. You must migrate your data.
+            </div>
+        </div>
+        
+        <div class="section" id="files">
+            <h2>File Structure</h2>
+            <h3>Core Files</h3>
+            <ul>
+                <li><code>Code.gs</code> - Main Apps Script code</li>
+                <li><code>README.md</code> - System overview and reference</li>
+                <li><code>QUICK_START.md</code> - Step-by-step setup guide</li>
+            </ul>
+            
+            <h3>Documentation</h3>
+            <ul>
+                <li><code>SYSTEM_OVERVIEW.md</code> - Complete system architecture</li>
+                <li><code>FORM_SETUP.md</code> - Google Forms setup instructions</li>
+                <li><code>TRIGGERS_SETUP.md</code> - Automated trigger configuration</li>
+                <li><code>URL_PREFILL_GUIDE.md</code> - URL pre-filling guide</li>
+                <li><code>MANAGER_CONFIRMATION_EXAMPLE.md</code> - Workflow example</li>
+                <li><code>MIGRATION_GUIDE.md</code> - Migration from old version</li>
+                <li><code>ARCHITECTURE_CHANGES.md</code> - Summary of changes</li>
+                <li><code>CONFIGURATION_CHECKLIST.md</code> - Pre-production checklist</li>
+            </ul>
+            
+            <h3>Templates</h3>
+            <ul>
+                <li><code>sheet_structure_multi.md</code> - Sheet structure reference</li>
+                <li><code>sheet_templates_multi/employees_template.csv</code> - Employee data template</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Performance Review System Documentation</p>
+        <p>Built with Google Sheets, Google Forms, and Apps Script</p>
+    </footer>
+</body>
+</html>
+

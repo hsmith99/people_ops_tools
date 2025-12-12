@@ -1,0 +1,6 @@
+Employee Email,Employee Name,Manager Email,Manager Name,Is Manager,Peer Selection Status,Peer Reviewers Selected,Manager Confirmation Status,Confirmed Peer Reviewers,Review Assignment Status,Self Review Status,Manager Review Status,Peer Reviews Status,Direct Reports Review Status,Last Reminder Sent,Reminder Count
+john.doe@company.com,John Doe,jane.manager@company.com,Jane Manager,TRUE,Not Started,,,,Not Started,Not Started,Not Started,Not Started,Not Started,,
+jane.manager@company.com,Jane Manager,,,TRUE,Not Started,,,,Not Started,Not Started,Not Started,Not Started,Not Started,,
+alice.smith@company.com,Alice Smith,jane.manager@company.com,Jane Manager,FALSE,Not Started,,,,Not Started,Not Started,Not Started,Not Started,Not Started,,
+bob.jones@company.com,Bob Jones,john.doe@company.com,John Doe,FALSE,Not Started,,,,Not Started,Not Started,Not Started,Not Started,Not Started,,
+
