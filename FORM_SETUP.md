@@ -114,8 +114,14 @@ Allows managers to confirm or modify peer reviewer selections for their direct r
    - Copy form ID and update `MANAGER_CONFIRMATION_FORM_ID` in `Code.gs`
 
 5. **Set up Form Submission Trigger**
-   - Add trigger for `onManagerConfirmationSubmit`
-   - Event: On form submit
+   - Go to Apps Script → Triggers (⏰ icon)
+   - Click "+ Add Trigger"
+   - Function: `onManagerConfirmationSubmit`
+   - Event source: From form
+   - Event type: On form submit
+   - Form: Select your Manager Confirmation Form
+   - Save and authorize permissions
+   - **See `TRIGGER_SETUP_EXPLAINED.md` for detailed instructions**
 
 ## Form 3: Performance Review Form
 
@@ -238,8 +244,14 @@ The actual review form that employees complete for self-review, manager review, 
    - Copy form ID and update `REVIEW_FORM_ID` in `Code.gs`
 
 5. **Set up Form Submission Trigger**
-   - Add trigger for `onReviewFormSubmit`
-   - Event: On form submit
+   - Go to Apps Script → Triggers (⏰ icon)
+   - Click "+ Add Trigger"
+   - Function: `onReviewFormSubmit`
+   - Event source: From form
+   - Event type: On form submit
+   - Form: Select your Performance Review Form
+   - Save and authorize permissions
+   - **See `TRIGGER_SETUP_EXPLAINED.md` for detailed step-by-step instructions with screenshots**
 
 ## Conditional Logic Setup
 
