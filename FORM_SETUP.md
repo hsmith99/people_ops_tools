@@ -61,10 +61,14 @@ Allows employees to select peers who will review them.
    - Update `PEER_SELECTION_FORM_ID` in `Code.gs`
 
 5. **Set up Form Submission Trigger**
-   - In Apps Script, go to Triggers
-   - Add trigger for `onPeerSelectionSubmit`
-   - Event: On form submit
-   - Select this form
+   - Go to Apps Script → Triggers (⏰ icon)
+   - Click "+ Add Trigger"
+   - Function: `onPeerSelectionSubmit`
+   - Event source: From form
+   - Event type: On form submit
+   - Form: Select your Peer Selection Form
+   - Save and authorize permissions
+   - **See `TRIGGER_SETUP_EXPLAINED.md` for detailed step-by-step instructions**
 
 ## Form 2: Manager Peer Reviewer Confirmation Form
 
