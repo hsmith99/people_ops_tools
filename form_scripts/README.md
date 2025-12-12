@@ -82,6 +82,30 @@ After setting up:
 - Check that function name is exactly `onFormSubmit`
 - Make sure you authorized permissions
 
+## Updating Employee Lists in Forms
+
+If you're having trouble updating employee lists from the main sheet script, use these standalone scripts instead:
+
+### For Peer Selection Form:
+
+1. Open **Peer Selection Form** → **Script editor**
+2. Copy contents of `update_employee_list_peer_selection.gs`
+3. Replace `YOUR_SPREADSHEET_ID_HERE` with your actual spreadsheet ID
+4. Replace `'Select Peer Reviewers'` with your exact question title (if different)
+5. Run `updateEmployeeList()` function
+6. Check execution log for results
+
+### For Manager Confirmation Form:
+
+1. Open **Manager Confirmation Form** → **Script editor**
+2. Copy contents of `update_employee_list_manager_confirmation.gs`
+3. Replace `YOUR_SPREADSHEET_ID_HERE` with your actual spreadsheet ID
+4. Replace `'Confirm or Reselect Peer Reviewers'` with your exact question title (if different)
+5. Run `updateEmployeeList()` function
+6. Check execution log for results
+
+**Why use these?** When scripts are bound to forms (instead of sheets), they have direct access to the form and don't run into permission issues.
+
 ## Alternative: Keep All Code in Main Script
 
 If you prefer to keep everything in your main Code.gs, you can use the manual trigger setup method described in `MANUAL_TRIGGER_SETUP.md`, but you'll need to copy the handler functions to each form's script anyway.
