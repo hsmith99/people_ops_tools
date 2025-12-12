@@ -21,9 +21,9 @@ const CONFIG = {
   SHEET_DASHBOARD: 'Dashboard',
   
   // Form IDs - Replace with your actual form IDs
-  PEER_SELECTION_FORM_ID: 'YOUR_PEER_SELECTION_FORM_ID',
-  MANAGER_CONFIRMATION_FORM_ID: 'YOUR_MANAGER_CONFIRMATION_FORM_ID',
-  REVIEW_FORM_ID: 'YOUR_REVIEW_FORM_ID',
+  PEER_SELECTION_FORM_ID: '1FAIpQLSexU8yKfYbgc6-NBfko4DZ_RAyzcdAyOcAx3fqlxqccY7Sw0A',
+  MANAGER_CONFIRMATION_FORM_ID: '1FAIpQLSdav1RDy1v97w7EwUjkxAQCp2RfunTNNFe8QP1xSy44QS4dBg',
+  REVIEW_FORM_ID: '1FAIpQLSfI2cf6p6VOO0Cqa46J0RPuFtIm3BzFA2tZmvVGamfjZ74r3w',
   
   // Employees sheet columns (0-based)
   EMP_COL_EMAIL: 0,
@@ -1266,28 +1266,61 @@ function updateAllFormEmployeeLists() {
  * This function creates form submission triggers for all three forms.
  * Run this once after configuring your form IDs in CONFIG.
  * 
+ * IMPORTANT: Form submission triggers must be created from scripts bound to the forms.
+ * This function will attempt to create them, but if it fails, you'll need to:
+ * 1. Open each form → Three dots (⋮) → Script editor
+ * 2. Copy the relevant handler function to that script
+ * 3. Set up the trigger from that form's script
+ * 
  * Usage: setupFormSubmissionTriggers()
  */
 function setupFormSubmissionTriggers() {
+  Logger.log('Setting up form submission triggers...');
+  Logger.log('Note: If this fails, you may need to set up triggers from each form\'s script editor.');
+  Logger.log('---');
+  
   // Delete existing form submission triggers (optional)
   const triggers = ScriptApp.getProjectTriggers();
+  let deletedCount = 0;
   triggers.forEach(trigger => {
     if (trigger.getEventType() === ScriptApp.EventType.ON_FORM_SUBMIT) {
-      ScriptApp.deleteTrigger(trigger);
-      Logger.log(`Deleted existing trigger: ${trigger.getHandlerFunction()}`);
+      try {
+        ScriptApp.deleteTrigger(trigger);
+        deletedCount++;
+        Logger.log(`Deleted existing trigger: ${trigger.getHandlerFunction()}`);
+      } catch (error) {
+        Logger.log(`Could not delete trigger: ${error.toString()}`);
+      }
     }
   });
+  if (deletedCount > 0) {
+    Logger.log(`Deleted ${deletedCount} existing trigger(s)`);
+  }
+  Logger.log('---');
+  
+  let successCount = 0;
+  let failCount = 0;
   
   // Create trigger for Peer Selection Form
   if (CONFIG.PEER_SELECTION_FORM_ID && CONFIG.PEER_SELECTION_FORM_ID !== 'YOUR_PEER_SELECTION_FORM_ID') {
     try {
       const peerForm = FormApp.openById(CONFIG.PEER_SELECTION_FORM_ID);
-      ScriptApp.newTrigger('onPeerSelectionSubmit')
-        .onFormSubmit()
+      // Verify we can access the form
+      const formTitle = peerForm.getTitle();
+      Logger.log(`Attempting to create trigger for: ${formTitle}`);
+      
+      // Try to create the trigger
+      const trigger = ScriptApp.newTrigger('onPeerSelectionSubmit')
+        .onFormSubmit(peerForm)
         .create();
+      
       Logger.log('✅ Created trigger for Peer Selection Form');
+      successCount++;
     } catch (error) {
       Logger.log(`❌ Error creating trigger for Peer Selection Form: ${error.toString()}`);
+      Logger.log(`   This usually means the script needs to be bound to the form.`);
+      Logger.log(`   See TRIGGER_SETUP_EXPLAINED.md for manual setup instructions.`);
+      failCount++;
     }
   } else {
     Logger.log('⚠️  Peer Selection Form ID not configured');
@@ -1297,12 +1330,20 @@ function setupFormSubmissionTriggers() {
   if (CONFIG.MANAGER_CONFIRMATION_FORM_ID && CONFIG.MANAGER_CONFIRMATION_FORM_ID !== 'YOUR_MANAGER_CONFIRMATION_FORM_ID') {
     try {
       const managerForm = FormApp.openById(CONFIG.MANAGER_CONFIRMATION_FORM_ID);
-      ScriptApp.newTrigger('onManagerConfirmationSubmit')
-        .onFormSubmit()
+      const formTitle = managerForm.getTitle();
+      Logger.log(`Attempting to create trigger for: ${formTitle}`);
+      
+      const trigger = ScriptApp.newTrigger('onManagerConfirmationSubmit')
+        .onFormSubmit(managerForm)
         .create();
+      
       Logger.log('✅ Created trigger for Manager Confirmation Form');
+      successCount++;
     } catch (error) {
       Logger.log(`❌ Error creating trigger for Manager Confirmation Form: ${error.toString()}`);
+      Logger.log(`   This usually means the script needs to be bound to the form.`);
+      Logger.log(`   See TRIGGER_SETUP_EXPLAINED.md for manual setup instructions.`);
+      failCount++;
     }
   } else {
     Logger.log('⚠️  Manager Confirmation Form ID not configured');
@@ -1312,18 +1353,38 @@ function setupFormSubmissionTriggers() {
   if (CONFIG.REVIEW_FORM_ID && CONFIG.REVIEW_FORM_ID !== 'YOUR_REVIEW_FORM_ID') {
     try {
       const reviewForm = FormApp.openById(CONFIG.REVIEW_FORM_ID);
-      ScriptApp.newTrigger('onReviewFormSubmit')
-        .onFormSubmit()
+      const formTitle = reviewForm.getTitle();
+      Logger.log(`Attempting to create trigger for: ${formTitle}`);
+      
+      const trigger = ScriptApp.newTrigger('onReviewFormSubmit')
+        .onFormSubmit(reviewForm)
         .create();
+      
       Logger.log('✅ Created trigger for Review Form');
+      successCount++;
     } catch (error) {
       Logger.log(`❌ Error creating trigger for Review Form: ${error.toString()}`);
+      Logger.log(`   This usually means the script needs to be bound to the form.`);
+      Logger.log(`   See TRIGGER_SETUP_EXPLAINED.md for manual setup instructions.`);
+      failCount++;
     }
   } else {
     Logger.log('⚠️  Review Form ID not configured');
   }
   
   Logger.log('---');
-  Logger.log('Form submission trigger setup complete!');
-  Logger.log('Check the Triggers page to verify all triggers were created.');
+  Logger.log(`Setup complete: ${successCount} succeeded, ${failCount} failed`);
+  
+  if (failCount > 0) {
+    Logger.log('');
+    Logger.log('⚠️  Some triggers failed to create. You need to set them up manually:');
+    Logger.log('   1. Open each form');
+    Logger.log('   2. Click three dots (⋮) → Script editor');
+    Logger.log('   3. Copy the handler function to that script');
+    Logger.log('   4. Set up trigger from that form\'s script');
+    Logger.log('   See TRIGGER_SETUP_EXPLAINED.md for detailed instructions');
+  } else {
+    Logger.log('✅ All triggers created successfully!');
+    Logger.log('Check the Triggers page to verify.');
+  }
 }
